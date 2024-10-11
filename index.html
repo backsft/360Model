@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>360 Street View with Stores</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #panorama {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .store-hotspot {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .enter-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .enter-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div id="panorama"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.js"></script>
+<script>
+    // Initialize the panorama viewer
+    var viewer = pannellum.viewer('panorama', {
+        "type": "equirectangular",
+        "panorama": "https://pannellum.org/images/alma.jpg",  // Replace with street view image
+        "autoLoad": true,
+        "hotSpots": [
+            {
+                "pitch": -2,          // Vertical position of the hotspot
+                "yaw": 110,           // Horizontal position of the hotspot
+                "type": "custom",
+                "cssClass": "store-hotspot", 
+                "createTooltipFunc": createStoreHotspot,
+                "createTooltipArgs": {
+                    "storeName": "Store 1",
+                    "storeId": "001",
+                    "storeLink": "#"
+                }
+            },
+            {
+                "pitch": -2,
+                "yaw": -30,
+                "type": "custom",
+                "cssClass": "store-hotspot", 
+                "createTooltipFunc": createStoreHotspot,
+                "createTooltipArgs": {
+                    "storeName": "Store 2",
+                    "storeId": "002",
+                    "storeLink": "#"
+                }
+            }
+        ]
+    });
+
+    // Function to create the store hotspot
+    function createStoreHotspot(hotSpotDiv, args) {
+        // Add the store name
+        var storeName = document.createElement('div');
+        storeName.innerHTML = args.storeName + ' (ID: ' + args.storeId + ')';
+        hotSpotDiv.appendChild(storeName);
+
+        // Add the "Enter" button
+        var enterButton = document.createElement('button');
+        enterButton.innerHTML = 'Enter';
+        enterButton.className = 'enter-btn';
+        enterButton.onclick = function() {
+            alert('Entering ' + args.storeName);
+            // You can replace this alert with a redirection or pop-up to show the store content
+            window.location.href = args.storeLink;  // Redirect to store page
+        };
+        hotSpotDiv.appendChild(enterButton);
+    }
+</script>
+
+</body>
+</html>
